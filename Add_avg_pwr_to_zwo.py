@@ -7,7 +7,7 @@ import re
 
 ####### To run, put the path to your workout files in here, and run it###########
 # Set the path to your original and new directories
-original_directory = '/Users/gv/Documents/Zwift/Workouts/526031_avgs/'
+original_directory = '/Your/path/Documents/Zwift/Workouts/SomeFolderZwiftMakes/'
 new_directory = os.path.join(original_directory, 'AvgPwrMod')
 
 
