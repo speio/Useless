@@ -1,3 +1,5 @@
+# Tested on Apple M1 Max, OSX 14.2 Beta 
+# Python 3.11.5 
 import os
 import xml.etree.ElementTree as ET
 import re
