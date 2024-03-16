@@ -49,4 +49,4 @@ def modify_zwo_files(directory):
                 modified_file.write(new_xml_str)
 
 # add path to workout files here
-modify_zwo_files('/Users/gv/Documents/Zwift/Workouts/526031_avgs/')
+modify_zwo_files('yourepath/Zwift/Workouts/512412431/')
