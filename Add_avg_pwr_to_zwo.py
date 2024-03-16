@@ -1,3 +1,10 @@
+# To run, put the path to your workout file in here, and run it...
+
+# Set the path to your original and new directories
+original_directory = 'your/path/Documents/Zwift/Workouts/SomeFolderZwiftMakes/'
+new_directory = os.path.join(original_directory, 'modified')
+
+
 # Tested on Apple M1 Max, OSX 14.2 Beta 
 # Python 3.11.5 
 import os
@@ -106,9 +113,5 @@ def modify_zwo_files(directory, target_directory):
             except Exception as e:
                 print(f"Error writing modified XML to {target_filepath}: {e}")
                 continue      
-
-# Set the path to your original and new directories
-original_directory = 'your/path/Documents/Zwift/Workouts/SomeFolderZwiftMakes/'
-new_directory = os.path.join(original_directory, 'modified')
-
+                
 modify_zwo_files(original_directory, new_directory)
