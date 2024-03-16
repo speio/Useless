@@ -1,16 +1,15 @@
-# To run, put the path to your workout file in here, and run it...
-
-# Set the path to your original and new directories
-original_directory = 'your/path/Documents/Zwift/Workouts/SomeFolderZwiftMakes/'
-new_directory = os.path.join(original_directory, 'modified')
-
-
 # Tested on Apple M1 Max, OSX 14.2 Beta 
 # Python 3.11.5 
 import os
 import shutil
 import xml.etree.ElementTree as ET
 import re
+
+####### To run, put the path to your workout files in here, and run it###########
+# Set the path to your original and new directories
+original_directory = '/Users/gv/Documents/Zwift/Workouts/526031_avgs/'
+new_directory = os.path.join(original_directory, 'AvgPwrMod')
+
 
 def pretty_tags_element():
     # Returns a formatted string for the tags element, adjusted for spacing
@@ -45,15 +44,15 @@ def modify_zwo_files(directory, target_directory):
         os.makedirs(target_directory)
 
     for filename in os.listdir(directory):
-        if filename.endswith(".zwo"):
-            original_filepath = os.path.join(directory, filename)
+        file_path = os.path.join(directory, filename)
+        if os.path.isfile(file_path) and filename.endswith(".zwo"):
             target_filepath = os.path.join(target_directory, filename)
 
             try:
-                original_tree = ET.parse(original_filepath)
+                original_tree = ET.parse(file_path)
                 original_root = original_tree.getroot()
             except ET.ParseError as e:
-                print(f"Skipping {original_filepath} due to parsing error: {e}")
+                print(f"Skipping {file_path} due to parsing error: {e}")
                 continue
 
             try:
@@ -65,14 +64,14 @@ def modify_zwo_files(directory, target_directory):
                         if elem.tag not in ['workout', 'textevent', 'IntervalsT']:
                             elem.set('show_avg', '1')
             except Exception as e:
-                print(f"Error modifying workout elements in {original_filepath}: {e}")
+                print(f"Error modifying workout elements in {file_path}: {e}")
                 continue
 
             try:
                 # Convert the entire XML structure back to string
                 xml_str = ET.tostring(original_root, encoding='unicode')
             except Exception as e:
-                print(f"Error converting XML to string in {original_filepath}: {e}")
+                print(f"Error converting XML to string in {file_path}: {e}")
                 continue
 
             try:
@@ -80,7 +79,7 @@ def modify_zwo_files(directory, target_directory):
                 xml_str = re.sub(r'\s*<tags>.*?</tags>\s*', '', xml_str, flags=re.DOTALL)
                 xml_str = xml_str.replace('<tags />\n', '')  # Remove empty self-closing <tags />
             except Exception as e:
-                print(f"Error removing existing tags block in {original_filepath}: {e}")
+                print(f"Error removing existing tags block in {file_path}: {e}")
                 continue
 
             try:
@@ -96,14 +95,14 @@ def modify_zwo_files(directory, target_directory):
                     # Adjust the insert_position to not introduce unnecessary whitespace
                     insert_position += 1
             except Exception as e:
-                print(f"Error finding insert position in {original_filepath}: {e}")
+                print(f"Error finding insert position in {file_path}: {e}")
                 continue
 
             try:
                 # Insert the pretty-printed <tags> block
-                new_xml_str = xml_str[:insert_position] + pretty_tags_element() + xml_str[:insert_position]
+                new_xml_str = xml_str[:insert_position] + pretty_tags_element() + xml_str[insert_position:]
             except Exception as e:
-                print(f"Error inserting tags block in {original_filepath}: {e}")
+                print(f"Error inserting tags block in {file_path}: {e}")
                 continue
 
             try:
@@ -112,6 +111,6 @@ def modify_zwo_files(directory, target_directory):
                     modified_file.write(new_xml_str)
             except Exception as e:
                 print(f"Error writing modified XML to {target_filepath}: {e}")
-                continue      
+                continue  
                 
 modify_zwo_files(original_directory, new_directory)
