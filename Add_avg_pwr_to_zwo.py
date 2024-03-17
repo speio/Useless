@@ -1,3 +1,10 @@
+####### To run, copy and save the script as a *.py file
+####### Edit the path variable for "original_directory" for your file system
+####### Then run it (assuming you have python installed) as "python Add_avg_pwr_to_zwo.py"
+####### A new folder will be made within the folder you specificed
+####### Access the new folder within zwift in the workouts tab > "plans" 
+####### Then use the dropdowns to find the new folder and select the workout
+
 # Tested on Apple M1 Max, OSX 14.2 Beta 
 # Python 3.11.5 
 import os
@@ -5,8 +12,8 @@ import shutil
 import xml.etree.ElementTree as ET
 import re
 
-####### To run, put the path to your workout files in here, and run it###########
-# Set the path to your original and new directories
+
+# Set the path to a folder of ZWO workout files, a new folder inside will be made
 original_directory = '/Your/path/Documents/Zwift/Workouts/SomeFolderZwiftMakes/'
 new_directory = os.path.join(original_directory, 'AvgPwrMod')
 
@@ -37,6 +44,8 @@ def expand_intervals(workout_element):
         workout_element.remove(original_elem)
         for new_elem in new_elems:
             workout_element.insert(index, new_elem)
+            index += 1
+            workout_element.insert(index, ET.Element('_newline'))  # Insert a placeholder element for newline
             index += 1
 
 def modify_zwo_files(directory, target_directory):
@@ -70,6 +79,7 @@ def modify_zwo_files(directory, target_directory):
             try:
                 # Convert the entire XML structure back to string
                 xml_str = ET.tostring(original_root, encoding='unicode')
+                xml_str = xml_str.replace('<_newline />', '\n')
             except Exception as e:
                 print(f"Error converting XML to string in {file_path}: {e}")
                 continue
