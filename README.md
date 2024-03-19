@@ -16,3 +16,5 @@ The expand grouped interval option is needed to compute the average power per-la
 has a "block" of On-Off intervals that repeats. The script just expands these blocks into individual intervals. 
 
 I hope it works for yall. 
+
+https://youtube.com/shorts/dLwe9rXiLtY?feature=share
